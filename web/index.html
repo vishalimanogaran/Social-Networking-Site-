@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select User or Admin</title>
+    <style>
+        /* Page Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #f8bbd0, #9c27b0); /* Gradient from light pink to purple */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            color: #fff; /* White text color */
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+            color: #fff;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap; /* Ensures buttons stack on smaller screens */
+        }
+
+        /* Button Styles */
+        button {
+            background: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: transform 0.3s, filter 0.3s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Image Styles */
+        .login-image {
+            width: 150px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .login-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Alt Text Styling */
+        .alt-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #fff; /* White text for alt text */
+        }
+
+        /* Custom Button Backgrounds */
+        .user-button {
+            background-color: #f8bbd0; /* Soft pink */
+            border-radius: 5px;
+            padding: 15px 25px;
+            color: #6a1b9a;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .admin-button {
+            background-color: #9c27b0; /* Purple */
+            border-radius: 5px;
+            padding: 15px 25px;
+            color: #fff;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Button hover effects */
+        .user-button:hover {
+            background-color: #f48fb1; /* Lighter pink */
+        }
+
+        .admin-button:hover {
+            background-color: #8e24aa; /* Darker purple */
+        }
+
+        /* Footer Styles */
+        footer {
+            margin-top: 40px;
+            font-size: 1rem;
+            color: #fff;
+            position: absolute;
+            bottom: 10px;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .user-button, .admin-button {
+                font-size: 1rem;
+                padding: 12px 22px;
+            }
+        }
+    </style>
+    <script>
+        function loadImages() {
+            // Dynamically load images
+            document.getElementById("userImage").src = "user.jpg"; // Path to User image
+            document.getElementById("adminImage").src = "admin.jpg"; // Path to Admin image
+        }
+    </script>
+</head>
+<body onload="loadImages()">
+    <h1>Welcome to the Social Networking Site</h1>
+    <div class="login-container">
+        <!-- User login selection -->
+        <form action="login.jsp" method="post">
+            <button type="submit" class="user-button">
+                <img id="userImage" alt="User Login" class="login-image" src="fallback-user.png"> <!-- Fallback image added -->
+                <span class="alt-text">User Login</span>
+            </button>
+        </form>
+
+        <!-- Admin login selection -->
+        <form action="adminLogin.jsp" method="post">
+            <button type="submit" class="admin-button">
+                <img id="adminImage" alt="Admin Login" class="login-image" src="fallback-admin.png"> <!-- Fallback image added -->
+                <span class="alt-text">Admin Login</span>
+            </button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        © 2025 YourWebsite. All rights reserved.
+    </footer>
+</body>
+</html>

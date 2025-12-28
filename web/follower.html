@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile & Video Call</title>
+    <style>
+        /* Profile Container */
+        .profile-container {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        /* Profile Image */
+        .profile-header img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            border: 3px solid #ddd;
+        }
+
+        /* Chat Section */
+        .chat-section {
+            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        textarea {
+            width: 100%;
+            max-width: 300px;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Video Containers */
+        #localVideo, #remoteVideo {
+            width: 100%;
+            height: 100%;
+            max-width: 300px;
+            max-height: 200px;
+            position: relative;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Buttons inside video */
+        .video-controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-controls button {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Profile Section -->
+    <div class="profile-container">
+        <div class="profile-header">
+            <!-- Manually update these values for testing -->
+            <img src="default-profile-pic.jpg" alt="Profile Picture">
+            <h2>Default User</h2>
+        </div>
+        <div>
+            <!-- Video Call Buttons -->
+            <button id="videoCallBtn" onclick="startVideoCall()">🎥 Video Call</button>
+            <button id="endCallBtn" style="display: none;" onclick="endVideoCall()">❌ End Call</button>
+            <button id="muteBtn" style="display: none;" onclick="toggleMute()">🔇 Mute</button>
+            <button onclick="startNormalCall('N/A')">📞 Normal Call</button>
+        </div>
+    </div>
+
+    <!-- Chat Section -->
+    <div class="chat-section">
+        <h3>Chat with Default User</h3>
+        <textarea id="chatBox" placeholder="Type a message..."></textarea>
+        <div>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- Video Call Section -->
+    <div id="videoSection" style="display:none;">
+        <video id="localVideo" autoplay muted></video>
+        <video id="remoteVideo" autoplay></video>
+
+        <div class="video-controls">
+            <button onclick="endVideoCall()">❌ End Call</button>
+            <button onclick="toggleMute()">🔇 Mute</button>
+        </div>
+    </div>
+
+    <script>
+    let localStream;
+    let peerConnection;
+    let isMuted = false;
+    const config = {
+        iceServers: [
+            { urls: "stun:stun.l.google.com:19302" }
+        ]
+    };
+
+    // Start Video Call
+    function startVideoCall() {
+        document.querySelector('.profile-container').style.display = "none"; // Hide profile section
+        document.querySelector('.chat-section').style.display = "none"; // Hide chat section
+        document.getElementById('videoSection').style.display = "block"; // Show video section
+
+        initiateVideoCall();
+    }
+
+    // Initiate Video Call
+    async function initiateVideoCall() {
+        try {
+            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+
+            // Create local video element
+            const localVideo = document.getElementById('localVideo');
+            localVideo.srcObject = localStream;
+
+            peerConnection = new RTCPeerConnection(config);
+            localStream.getTracks().forEach((track) => peerConnection.addTrack(track, localStream));
+
+            // Remote video stream
+            peerConnection.ontrack = (event) => {
+                const remoteVideo = document.getElementById('remoteVideo');
+                remoteVideo.srcObject = event.streams[0];
+            };
+
+            // ICE Candidate handling
+            peerConnection.onicecandidate = (event) => {
+                if (event.candidate) {
+                    console.log("New ICE candidate:", event.candidate);
+                }
+            };
+
+            // Create an offer and set up the connection
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            console.log("Offer sent:", offer);
+        } catch (error) {
+            console.error("Error starting video call:", error);
+            alert("Unable to access your camera or microphone.");
+        }
+    }
+
+    // End Video Call
+    function endVideoCall() {
+        if (peerConnection) peerConnection.close();
+        if (localStream) {
+            localStream.getTracks().forEach((track) => track.stop());
+        }
+
+        // Reset video elements
+        document.getElementById('localVideo').srcObject = null;
+        document.getElementById('remoteVideo').srcObject = null;
+
+        // Reset visibility of sections
+        document.querySelector('.profile-container').style.display = "block";
+        document.querySelector('.chat-section').style.display = "block";
+        document.getElementById('videoSection').style.display = "none";
+    }
+
+    // Toggle Mute
+    function toggleMute() {
+        if (localStream) {
+            localStream.getAudioTracks()[0].enabled = isMuted;
+            isMuted = !isMuted;
+            document.querySelectorAll('.video-controls button')[1].textContent = isMuted ? "🔈 Unmute" : "🔇 Mute";
+        }
+    }
+
+    // Start Normal Phone Call
+    function startNormalCall(phoneNumber) {
+        alert("Calling " + phoneNumber + "...");
+    }
+
+    // Send message
+    function sendMessage() {
+        const chatBox = document.getElementById("chatBox");
+        const message = chatBox.value.trim();
+        if (message) {
+            alert("Message sent: " + message);
+            chatBox.value = ""; // Clear the chat box
+        } else {
+            alert("Please enter a message before sending.");
+        }
+    }
+</script>
+
+</body>
+</html>

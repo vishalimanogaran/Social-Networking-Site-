@@ -1,0 +1,270 @@
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Carousel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8e0f5; /* Light pink background */
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header Styles */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      background-color: #9b59b6; /* Violet background for header */
+      padding: 10px 20px;
+      color: white;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 16px;
+    }
+    .nav-links a:hover {
+      color: #8e44ad; /* Darker violet on hover */
+    }
+
+    /* Search Section */
+    .search-container {
+      margin: 20px auto;
+      text-align: center;
+    }
+    .search-container input {
+      padding: 10px;
+      width: 60%;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #9b59b6; /* Violet border for input */
+    }
+    .search-container button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #9b59b6; /* Violet button background */
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .search-container button:hover {
+      background-color: #8e44ad; /* Darker violet on hover */
+    }
+
+    /* Carousel Styles */
+    .carousel-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 30px auto;
+      position: relative;
+    }
+    .carousel-track {
+      display: flex;
+      gap: 20px;
+      transition: transform 0.5s ease-in-out;
+    }
+    .carousel-item {
+      width: 200px;
+      height: 300px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .carousel-item:hover {
+      transform: scale(1.05);
+    }
+    .carousel-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .friend-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #9b59b6; /* Violet color for text */
+    }
+    .follow-btn, .unfollow-btn {
+      padding: 5px 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: 1px solid #9b59b6; /* Violet border for buttons */
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .follow-btn {
+      background-color: #9b59b6; /* Violet background */
+      color: white;
+    }
+    .unfollow-btn {
+      background-color: #8e44ad; /* Darker violet background */
+      color: white;
+    }
+    .follow-btn:hover {
+      background-color: #8e44ad; /* Darker violet on hover */
+    }
+    .unfollow-btn:hover {
+      background-color: #9b59b6; /* Lighter violet on hover */
+    }
+
+    /* Carousel Navigation */
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      transform: translateY(-50%);
+    }
+    .carousel-nav button {
+      background-color: rgba(155, 89, 182, 0.5); /* Transparent violet background */
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .carousel-nav button:hover {
+      background-color: rgba(155, 89, 182, 0.8); /* Darker violet on hover */
+    }
+  </style>
+</head>
+<body>
+   Header Section 
+  <div class="header">
+    <div class="logo">Welcome....</div>
+    <div class="nav-links">
+      <a href="home.jsp">Home</a>
+      <a href="profile.jsp">Profile</a>
+      <a href="message.jsp">Messages</a>
+      <a href="post.jsp">Post</a>
+      <a href="user_profile.jsp">User Profile</a>
+      <a href="logout.jsp">Logout</a>
+    </div>
+  </div>
+
+   Search Section 
+  <div class="search-container">
+    <form action="search.jsp" method="post">
+      <input type="text" placeholder="Search..." id="searchInput" name="searchQuery">
+      <button id="searchBtn">Search</button>
+    </form>
+  </div>
+
+   Carousel Container 
+  <div class="carousel-container">
+    <div class="carousel-track" id="carouselTrack">
+      <% 
+        // Avoid duplicate declaration of variables
+        String searchQuery = (String) request.getAttribute("searchQuery");
+        if (searchQuery == null) {
+            searchQuery = request.getParameter("searchQuery");
+            if (searchQuery == null) searchQuery = "";
+            request.setAttribute("searchQuery", searchQuery);
+        }
+
+        String[][] items = (String[][]) request.getAttribute("items");
+        if (items == null) {
+            items = new String[][] {
+                {"Arisha", "girl1.jpg"},
+                {"sarjun", "boy1.jpg"},
+                {"keerthi", "girl2.jpg"},
+                {"vikas", "boy2.jpg"},
+                {"deepthi", "girl3.jpg"},
+                {"sidharth", "boy3.jpg"},
+                {"saha", "girl4.jpg"},
+                {"vihaan", "boy4.jpg"},
+                {"sowmiya", "girl5.jpg"},
+                {"hari", "boy5.jpg"},
+                {"mithu", "girl6.jpg"},
+                {"kathir", "boy6.jpg"},
+                {"krish", "boy7.jpg"}
+            };
+            request.setAttribute("items", items);
+        }
+
+        for (String[] item : items) {
+            String name = item[0];
+            String image = item[1];
+            if (name.toLowerCase().contains(searchQuery.toLowerCase())) {
+      %>
+        <div class="carousel-item" data-name="<%= name %>">
+          <img src="placeholder.jpg" data-src="<%= image %>" alt="<%= name %>" class="lazy">
+          <p class="friend-name"><%= name %></p>
+          <button class="follow-btn">Follow</button>
+          <button class="unfollow-btn">Unfollow</button>
+        </div>
+      <% 
+            }
+        }
+      %>
+    </div>
+
+     Carousel Navigation 
+    <div class="carousel-nav">
+      <button id="prevBtn">&lt;</button>
+      <button id="nextBtn">&gt;</button>
+    </div>
+  </div>
+
+  <script>
+    // Lazy loading functionality
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.onload = () => img.classList.add("loaded");
+          observer.unobserve(img);
+        }
+      });
+    });
+
+    document.querySelectorAll(".lazy").forEach((img) => observer.observe(img));
+
+    // Move carousel when prev or next buttons are clicked
+    let track = document.getElementById("carouselTrack");
+    let currentIndex = 0;
+    const items = document.querySelectorAll(".carousel-item");
+
+    // Function to move the carousel items
+    function updateCarousel() {
+      track.style.transform = `translateX(-${currentIndex * 220}px)`;  // Adjust the number to change the sliding effect
+    }
+
+    // Prev button click event
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      currentIndex--;
+      if (currentIndex < 0) currentIndex = items.length - 1; // Loop to the last item
+      updateCarousel();
+    });
+
+    // Next button click event
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      currentIndex++;
+      if (currentIndex >= items.length) currentIndex = 0; // Loop back to the first item
+      updateCarousel();
+    });
+  </script>
+
+</body>
+</html>-->

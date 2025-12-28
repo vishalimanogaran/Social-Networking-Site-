@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Network Notifications</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ff69b4, #9c27b0); /* Pink to purple gradient */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 40%;
+            background: white; /* White background for the card */
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 
+                        0 6px 6px rgba(0, 0, 0, 0.2); /* 3D effect */
+            text-align: center;
+        }
+        h2 {
+            color: #9c27b0; /* Purple header text */
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        a {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, #ff69b4, #9c27b0); /* Pink to purple gradient button */
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            margin: 10px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        a:hover {
+            background: linear-gradient(135deg, #ff85c0, #7b1fa2); /* Slightly lighter gradient on hover */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px); /* Slight hover lift */
+        }
+        @media (max-width: 768px) {
+            .container {
+                width: 80%;
+                padding: 20px;
+            }
+            h2 {
+                font-size: 20px;
+            }
+            a {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Social Networking Notifications</h2>
+        <a href="add_notification.jsp">Add Notification</a>
+        <a href="viewNotification.jsp">View Notifications</a>
+    </div>
+</body>
+</html>
